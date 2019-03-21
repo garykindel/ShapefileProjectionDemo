@@ -24,8 +24,8 @@ namespace WpfTestApp
             _fromLonLat["EPSG:4326"] = (x, y) => new Point(x, y);
             _toLonLat["EPSG:3857"] = SphericalMercator.ToLonLat;
             _fromLonLat["EPSG:3857"] = SphericalMercator.FromLonLat;
-            _toLonLat["EPSG:CUSTOM"] = CustomProjection.ToLonLat;
-            _fromLonLat["EPSG:CUSTOM"] = CustomProjection.FromLonLat;
+            _toLonLat["EPSG:CUSTOM"] = CustomProjectionToLonLat;
+            _fromLonLat["EPSG:CUSTOM"] = CustomProjectionFromLonLat;
         }
         
         public IGeometry Transform(string fromCRS, string toCRS, IGeometry geometry)
