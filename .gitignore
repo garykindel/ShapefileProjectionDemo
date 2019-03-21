@@ -328,8 +328,4 @@ ASALocalRun/
 
 # MFractors (Xamarin productivity tool) working folder 
 .mfractor/
-/WpfTestApp/Properties/Settings.settings
-/WpfTestApp/Properties/Settings.Designer.cs
-/WpfTestApp/Properties/Resources.resx
-/WpfTestApp/Properties/Resources.Designer.cs
-/WpfTestApp/Properties/AssemblyInfo.cs
+

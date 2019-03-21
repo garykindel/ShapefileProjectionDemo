@@ -104,5 +104,12 @@ namespace WpfTestApp
 
             this.xMapControl.Refresh();
         }
+
+        private void XMapControl_MouseMove(object sender, MouseEventArgs e)
+        {
+            var screenPosition = e.GetPosition(xMapControl);
+            var worldPosition = xMapControl.Viewport.ScreenToWorld(screenPosition.X, screenPosition.Y);
+            MouseCoordinates.Text = $"{worldPosition.X:F0}, {worldPosition.Y:F0}";
+        }
     }
 }

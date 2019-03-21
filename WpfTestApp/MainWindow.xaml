@@ -15,8 +15,18 @@
                 <Button Name="btnOSMWithUS" Margin="5 0 0 0"  Height="25" Content="Load OSM w States" Click="BtnOSMWithUS_Click"/>
                 <Button Name="btnOSMWithNY" Margin="5 0 0 0"  Height="25" Content="Load OSM NY Townships" Click="BtnOSMWithNY_Click"/>
                 <Button Name="btnNY" Margin="5 0 0 0"  Height="25" Content="Load OSM NY Townships" Click="BtnNY_Click"/>
-            </StackPanel>
-            <Wpf:MapControl DockPanel.Dock="Bottom" Name="xMapControl" Background="AliceBlue" HorizontalAlignment="Stretch"  VerticalAlignment="Stretch"/>
+            </StackPanel>                        
+            <Wpf:MapControl DockPanel.Dock="Bottom" 
+                            Name="xMapControl" 
+                            MouseMove="XMapControl_MouseMove"
+                            Background="AliceBlue" 
+                            HorizontalAlignment="Stretch"  
+                            VerticalAlignment="Stretch"/>
+
         </DockPanel>
+        <Border BorderBrush="White" Opacity="0.65" Background="White" BorderThickness="6"
+                            VerticalAlignment="Bottom" HorizontalAlignment="Center" MinWidth="40" MinHeight="30">
+            <TextBlock x:Name="MouseCoordinates" Text="0, 0" />
+        </Border>
     </Grid>
 </Window>
