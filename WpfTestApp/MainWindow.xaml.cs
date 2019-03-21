@@ -84,5 +84,25 @@ namespace WpfTestApp
             this.xMapControl.Refresh();
 
         }
+
+        private void BtnNY_Click(object sender, RoutedEventArgs e)
+        {
+            this.xMapControl.RenderMode = Mapsui.UI.Wpf.RenderMode.Wpf;
+            this.xMapControl.Map = new Mapsui.Map();
+
+            IProvider wShapeFile = new Mapsui.Desktop.Shapefile.ShapeFile("NYTOWNS_POLY.shp", true);
+
+            var wLayerStyle = new Mapsui.Styles.VectorStyle();
+            wLayerStyle.Fill = new Mapsui.Styles.Brush { FillStyle = FillStyle.Solid, Color = Mapsui.Styles.Color.Gray };
+            wLayerStyle.Line = new Mapsui.Styles.Pen { Color = Mapsui.Styles.Color.Black, PenStyle = PenStyle.Solid };
+            wLayerStyle.Outline = new Mapsui.Styles.Pen { Color = Mapsui.Styles.Color.Black, PenStyle = PenStyle.Solid };
+
+            var wLayer = new Layer { Name = "NY Townships", DataSource = wShapeFile, Style = wLayerStyle, Enabled = true };
+            this.xMapControl.Map.Layers.Add(wLayer);
+            this.xMapControl.Refresh();
+
+
+            this.xMapControl.Refresh();
+        }
     }
 }
