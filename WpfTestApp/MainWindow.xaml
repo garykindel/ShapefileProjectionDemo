@@ -14,7 +14,7 @@
                 <Button Name="btnOSM" Margin="5 0 0 0"  Height="25" Content="Load OpenStreetMaps" Click="BtnOSM_Click"/>
                 <Button Name="btnOSMWithUS" Margin="5 0 0 0"  Height="25" Content="Load OSM w States" Click="BtnOSMWithUS_Click"/>
                 <Button Name="btnOSMWithNY" Margin="5 0 0 0"  Height="25" Content="Load OSM NY Townships" Click="BtnOSMWithNY_Click"/>
-                <Button Name="btnNY" Margin="5 0 0 0"  Height="25" Content="Load OSM NY Townships" Click="BtnNY_Click"/>
+                <Button Name="btnNY" Margin="5 0 0 0"  Height="25" Content="Load only NY Townships" Click="BtnNY_Click"/>
             </StackPanel>                        
             <Wpf:MapControl DockPanel.Dock="Bottom" 
                             Name="xMapControl" 
