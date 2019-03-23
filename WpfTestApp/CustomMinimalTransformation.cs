@@ -2,13 +2,13 @@
 using GeoAPI.CoordinateSystems.Transformations;
 using Mapsui.Geometries;
 using Mapsui.Projection;
-using ProjNet.CoordinateSystems;
 using ProjNet.CoordinateSystems.Transformations;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ProjNet.CoordinateSystems;
 
 namespace WpfTestApp
 {
@@ -16,21 +16,19 @@ namespace WpfTestApp
     {
         private readonly IDictionary<string, Func<double, double, Point>> _toLonLat = new Dictionary<string, Func<double, double, Point>>();
         private readonly IDictionary<string, Func<double, double, Point>> _fromLonLat = new Dictionary<string, Func<double, double, Point>>();
-        
-        
+
+
 
         public CustomMinimalTransformation()
         {
             _toLonLat["EPSG:4326"] = (x, y) => new Point(x, y);
             _fromLonLat["EPSG:4326"] = (x, y) => new Point(x, y);
-             _toLonLat["EPSG:3857M"] = SphericalMercator.ToLonLat;
-             _fromLonLat["EPSG:3857M"] = SphericalMercator.FromLonLat;
-             _toLonLat["EPSG:3857"] = CustomProjectionToLonLat;
-             _fromLonLat["EPSG:3857"] = CustomProjectionFromLonLat;
+            _toLonLat["EPSG:3857"] = SphericalMercator.ToLonLat;
+            _fromLonLat["EPSG:3857"] = SphericalMercator.FromLonLat;
             _toLonLat["EPSG:CUSTOM"] = CustomProjectionToLonLat;
             _fromLonLat["EPSG:CUSTOM"] = CustomProjectionFromLonLat;
         }
-        
+
         public IGeometry Transform(string fromCRS, string toCRS, IGeometry geometry)
         {
             Transform(geometry.AllVertices(), _toLonLat[fromCRS]);
@@ -61,45 +59,42 @@ namespace WpfTestApp
             if (!_fromLonLat.ContainsKey(toCRS)) return false;
             return true;
         }
-        
-        
+
+
         CoordinateTransformationFactory _ctFac;
         ICoordinateTransformation _ctTo;   //Custom to WGS84
         ICoordinateTransformation _ctFrom; //WGS84 to Custom
 
         public void LoadSourceWKT(string filepath)
         {
+            //@"C:\DRC_Data\Arcview\USA\Townships\NYTOWNS_POLY.prj";
+
             ICoordinateSystemFactory csFac = new ProjNet.CoordinateSystems.CoordinateSystemFactory();
-            ICoordinateSystem csSource = null;
-            ICoordinateSystem csTarget = null;
-            if (!String.IsNullOrWhiteSpace(filepath) && System.IO.File.Exists(filepath))
-            {
-                string wkt = System.IO.File.ReadAllText(filepath);
-                csSource = csFac.CreateFromWkt(wkt);
-                csTarget = ProjectedCoordinateSystem.WebMercator;
-            }
-            else
-            {
-                csSource = GeographicCoordinateSystem.WGS84;
-                csTarget = ProjectedCoordinateSystem.WebMercator;
-            }
+            string file = @"NYTOWNS_POLY.prj";
+            string wkt = System.IO.File.ReadAllText(file);
+            ICoordinateSystem csFrom = csFac.CreateFromWkt(wkt);
             _ctFac = new CoordinateTransformationFactory();
 
-            _ctTo = _ctFac.CreateFromCoordinateSystems(csSource, csTarget);
-            _ctFrom = _ctFac.CreateFromCoordinateSystems(csTarget, csSource);
+            _ctTo = _ctFac.CreateFromCoordinateSystems(
+                csFrom,
+                GeographicCoordinateSystem.WGS84);
+
+            _ctFrom = _ctFac.CreateFromCoordinateSystems(
+                GeographicCoordinateSystem.WGS84,
+                csFrom);
         }
 
         public Point CustomProjectionFromLonLat(double lon, double lat)
         {
-            Point pt = new Point(lon, lat);                       
-            double[] result= _ctTo.MathTransform.Transform(pt.ToDoubleArray());
+            Point pt = new Point(lon, lat);
+            double[] result = _ctFrom.MathTransform.Transform(pt.ToDoubleArray());
             return new Point(result[0], result[1]);
         }
 
         public Point CustomProjectionToLonLat(double x, double y)
         {
             Point pt = new Point(x, y);
-            double[] result = _ctFrom.MathTransform.Transform(pt.ToDoubleArray());
+            double[] result = _ctTo.MathTransform.Transform(pt.ToDoubleArray());
             return new Point(result[0], result[1]);
         }
 
