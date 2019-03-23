@@ -2,6 +2,7 @@
 using GeoAPI.CoordinateSystems.Transformations;
 using Mapsui.Geometries;
 using Mapsui.Projection;
+using ProjNet.CoordinateSystems;
 using ProjNet.CoordinateSystems.Transformations;
 using System;
 using System.Collections.Generic;
@@ -22,8 +23,10 @@ namespace WpfTestApp
         {
             _toLonLat["EPSG:4326"] = (x, y) => new Point(x, y);
             _fromLonLat["EPSG:4326"] = (x, y) => new Point(x, y);
-            _toLonLat["EPSG:3857"] = SphericalMercator.ToLonLat;
-            _fromLonLat["EPSG:3857"] = SphericalMercator.FromLonLat;
+             _toLonLat["EPSG:3857M"] = SphericalMercator.ToLonLat;
+             _fromLonLat["EPSG:3857M"] = SphericalMercator.FromLonLat;
+             _toLonLat["EPSG:3857"] = CustomProjectionToLonLat;
+             _fromLonLat["EPSG:3857"] = CustomProjectionFromLonLat;
             _toLonLat["EPSG:CUSTOM"] = CustomProjectionToLonLat;
             _fromLonLat["EPSG:CUSTOM"] = CustomProjectionFromLonLat;
         }
@@ -66,15 +69,24 @@ namespace WpfTestApp
 
         public void LoadSourceWKT(string filepath)
         {
-            //@"C:\DRC_Data\Arcview\USA\Townships\NYTOWNS_POLY.prj";
-
             ICoordinateSystemFactory csFac = new ProjNet.CoordinateSystems.CoordinateSystemFactory();
-            string file = @"NYTOWNS_POLY.prj";
-            string wkt = System.IO.File.ReadAllText(file);
-            ICoordinateSystem csFrom = csFac.CreateFromWkt(wkt);
+            ICoordinateSystem csSource = null;
+            ICoordinateSystem csTarget = null;
+            if (!String.IsNullOrWhiteSpace(filepath) && System.IO.File.Exists(filepath))
+            {
+                string wkt = System.IO.File.ReadAllText(filepath);
+                csSource = csFac.CreateFromWkt(wkt);
+                csTarget = ProjectedCoordinateSystem.WebMercator;
+            }
+            else
+            {
+                csSource = GeographicCoordinateSystem.WGS84;
+                csTarget = ProjectedCoordinateSystem.WebMercator;
+            }
             _ctFac = new CoordinateTransformationFactory();
-            _ctTo = _ctFac.CreateFromCoordinateSystems(csFrom, ProjNet.CoordinateSystems.ProjectedCoordinateSystem.WebMercator);
-            _ctFrom = _ctFac.CreateFromCoordinateSystems(ProjNet.CoordinateSystems.ProjectedCoordinateSystem.WebMercator, csFrom);
+
+            _ctTo = _ctFac.CreateFromCoordinateSystems(csSource, csTarget);
+            _ctFrom = _ctFac.CreateFromCoordinateSystems(csTarget, csSource);
         }
 
         public Point CustomProjectionFromLonLat(double lon, double lat)

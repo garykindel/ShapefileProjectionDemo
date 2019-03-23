@@ -40,10 +40,14 @@ namespace WpfTestApp
 
         private void BtnOSMWithUS_Click(object sender, RoutedEventArgs e)
         {
+            var customTrans = new CustomMinimalTransformation();
+            customTrans.LoadSourceWKT(null);
+
             this.xMapControl.RenderMode = Mapsui.UI.Wpf.RenderMode.Wpf;
-            this.xMapControl.Map = new Mapsui.Map() { CRS = "EPSG:3857", Transformation = new CustomMinimalTransformation() };
+            this.xMapControl.Map = new Mapsui.Map() { CRS = "EPSG:3857", Transformation = customTrans };
             this.xMapControl.Map.Layers.Add(new TileLayer(KnownTileSources.Create(KnownTileSource.OpenStreetMap)));
             IProvider wShapeFile = new Mapsui.Desktop.Shapefile.ShapeFile("lower48.shp", true) { CRS = "EPSG:4326" };
+            //IProvider wShapeFile = new Mapsui.Desktop.Shapefile.ShapeFile("lower48.shp", true);
 
             var wLayerStyle = new Mapsui.Styles.VectorStyle();
             wLayerStyle.Fill = new Mapsui.Styles.Brush { FillStyle = FillStyle.Solid, Color = Mapsui.Styles.Color.Orange };
@@ -109,7 +113,10 @@ namespace WpfTestApp
         {
             var screenPosition = e.GetPosition(xMapControl);
             var worldPosition = xMapControl.Viewport.ScreenToWorld(screenPosition.X, screenPosition.Y);
-            MouseCoordinates.Text = $"{worldPosition.X:F0}, {worldPosition.Y:F0}";
+            //var pt = SphericalMercator.ToLonLat(worldPosition.X, worldPosition.Y);
+            //MouseCoordinates.Text = $"{pt.X:F2}, {pt.Y:F2}";
+
+            MouseCoordinates.Text = $"{worldPosition.X:F2}, {worldPosition.Y:F2}";
         }
     }
 }
