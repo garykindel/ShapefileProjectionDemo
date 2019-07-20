@@ -32,9 +32,9 @@ namespace WpfTestApp
 
         private void BtnOSM_Click(object sender, RoutedEventArgs e)
         {
-            this.xMapControl.RenderMode = Mapsui.UI.Wpf.RenderMode.Wpf;
+            //this.xMapControl.RenderMode = Mapsui.UI.Wpf.RenderMode.Wpf;
             this.xMapControl.Map = new Mapsui.Map();                     
-            this.xMapControl.Map.Layers.Add(new TileLayer(KnownTileSources.Create(KnownTileSource.OpenStreetMap)));
+            this.xMapControl.Map.Layers.Add(new TileLayer(KnownTileSources.Create(KnownTileSource.BingHybrid)));
             this.xMapControl.Refresh();
         }
 
@@ -43,9 +43,9 @@ namespace WpfTestApp
             var customTrans = new CustomMinimalTransformation();
             customTrans.LoadSourceWKT(null);
 
-            this.xMapControl.RenderMode = Mapsui.UI.Wpf.RenderMode.Wpf;
+            //this.xMapControl.RenderMode = Mapsui.UI.Wpf.RenderMode.Wpf;
             this.xMapControl.Map = new Mapsui.Map() { CRS = "EPSG:3857", Transformation = customTrans };
-            this.xMapControl.Map.Layers.Add(new TileLayer(KnownTileSources.Create(KnownTileSource.OpenStreetMap)));
+            this.xMapControl.Map.Layers.Add(new TileLayer(KnownTileSources.Create(KnownTileSource.BingHybrid)));
             IProvider wShapeFile = new Mapsui.Desktop.Shapefile.ShapeFile("lower48.shp", true) { CRS = "EPSG:4326" };
             //IProvider wShapeFile = new Mapsui.Desktop.Shapefile.ShapeFile("lower48.shp", true);
 
@@ -72,9 +72,9 @@ namespace WpfTestApp
             var customTrans = new CustomMinimalTransformation();
             customTrans.LoadSourceWKT("NYTOWNS_POLY.prj");
 
-            this.xMapControl.RenderMode = Mapsui.UI.Wpf.RenderMode.Wpf;
+            //this.xMapControl.RenderMode = Mapsui.UI.Wpf.RenderMode.Wpf;
             this.xMapControl.Map = new Mapsui.Map() { CRS = "EPSG:3857", Transformation = customTrans };
-            this.xMapControl.Map.Layers.Add(new TileLayer(KnownTileSources.Create(KnownTileSource.OpenStreetMap)));
+            this.xMapControl.Map.Layers.Add(new TileLayer(KnownTileSources.Create(KnownTileSource.BingHybrid)));
 
             IProvider wShapeFile = new Mapsui.Desktop.Shapefile.ShapeFile("NYTOWNS_POLY.shp", true) { CRS = "EPSG:CUSTOM" };
 
@@ -91,7 +91,7 @@ namespace WpfTestApp
 
         private void BtnNY_Click(object sender, RoutedEventArgs e)
         {
-            this.xMapControl.RenderMode = Mapsui.UI.Wpf.RenderMode.Wpf;
+                       
             this.xMapControl.Map = new Mapsui.Map();
 
             IProvider wShapeFile = new Mapsui.Desktop.Shapefile.ShapeFile("NYTOWNS_POLY.shp", true);
